@@ -1,1 +1,1 @@
-from twoface.greetings import append_hello_world
+from twoface.main import toggle_file, open_horizontal, open_vertical, open_buffer
