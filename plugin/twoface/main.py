@@ -14,8 +14,10 @@ def toggle_file():
 
     possible_files = find_possible_files(fpath)
 
-    if len(possible_files) != 0:
-        venom.open_file(possible_files[0])
+    existing_files = [f for f in possible_files if os.path.isfile(f)]
+
+    if len(existing_files) != 0:
+        venom.open_file(existing_files[0])
 
 def open_horizontal():
     pass

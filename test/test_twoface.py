@@ -23,7 +23,6 @@ class TestOpenFile(unittest.TestCase):
             self.open_file_called.append(fpath)
 
         def __get_current_file_path():
-            print "WAAA"
             return './testfiles/foo.h'
 
         import venom
@@ -37,4 +36,4 @@ class TestOpenFile(unittest.TestCase):
         result = twoface.toggle_file()
 
         eq_(len(self.open_file_called), 1)
-        eq_(self.open_file_called[0], './testfiles/foo.c')
+        eq_(self.open_file_called[0], './testfiles/foo.cpp')
