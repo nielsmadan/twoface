@@ -4,6 +4,18 @@ from nose.tools import eq_
 import vim_stub
 import venom_stub
 
+OPEN_FILE_CALLS = []
+
+def __open_file_monitor(fpath):
+    OPEN_FILE_CALLS.append(fpath)
+
+def __get_current_file_path():
+    return './testfiles/foo.h'
+
+import venom
+venom.open_file = __open_file_monitor
+venom.get_current_file_path = __get_current_file_path
+
 import twoface
 
 class TestPossibleFiles(unittest.TestCase):
@@ -17,23 +29,15 @@ class TestPossibleFiles(unittest.TestCase):
 
 class TestOpenFile(unittest.TestCase):
     def setUp(self):
-        self.open_file_called = []
-
-        def __open_file_monitor(fpath):
-            self.open_file_called.append(fpath)
-
-        def __get_current_file_path():
-            return './testfiles/foo.h'
-
-        import venom
-        venom.open_file = __open_file_monitor
-        venom.get_current_file_path = __get_current_file_path
+        global OPEN_FILE_CALLS
+        OPEN_FILE_CALLS = []
 
     def tearDown(self):
-        self.open_file_called = []
+        global OPEN_FILE_CALLS
+        OPEN_FILE_CALLS = []
 
     def test_open_file(self):
         result = twoface.toggle_file()
 
-        eq_(len(self.open_file_called), 1)
-        eq_(self.open_file_called[0], './testfiles/foo.cpp')
+        eq_(len(OPEN_FILE_CALLS), 1)
+        eq_(OPEN_FILE_CALLS[0], './testfiles/foo.cpp')
