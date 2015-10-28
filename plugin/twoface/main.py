@@ -2,20 +2,20 @@ import vim
 import venom
 import os.path
 
+MAP_FILE_EXTENSION = {
+    'h': ['c', 'cpp'],
+    'hpp': ['cpp'],
+    'cpp': ['hpp', 'h'],
+    'c': ['h'],
+}
 
 def toggle_file():
     fpath = venom.get_current_file_path()
 
-    path_ext = os.path.splitext(fpath)
+    possible_files = find_possible_files(fpath)
 
-    newpath = ""
-
-    if path_ext[1] == ".h":
-        newpath = path_ext[0] + ".cpp"
-    elif path_ext[1] == ".cpp":
-        newpath = path_ext[0] + ".h"
-
-    venom.open_file(newpath)
+    if len(possible_files) != 0:
+        venom.open_file(possible_files[0])
 
 def open_horizontal():
     pass
@@ -23,5 +23,10 @@ def open_horizontal():
 def open_vertical():
     pass
 
-def open_buffer():
+def open_tab():
     pass
+
+def find_possible_files(fpath):
+    (path, extension) = os.path.splitext(fpath)
+
+    return [path + '.' + ext for ext in MAP_FILE_EXTENSION[extension[1:]]]
