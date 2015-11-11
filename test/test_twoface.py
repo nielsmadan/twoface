@@ -27,6 +27,26 @@ class TestPossibleFiles(unittest.TestCase):
         eq_(result[1], "./testfiles/foo.cpp")
 
 
+class TestExistingFiles(unittest.TestCase):
+    def test_find_possible_files_all_exist(self):
+        result = twoface.main.filter_existing_files( ["./testfiles/foo.h", "./testfiles/foo.cpp"])
+
+        eq_(len(result), 2)
+        eq_(result[0], "./testfiles/foo.h")
+        eq_(result[1], "./testfiles/foo.cpp")
+
+    def test_find_possible_files_some_exist(self):
+        result = twoface.main.filter_existing_files( ["./testfiles/foo.hpp", "./testfiles/foo.cpp"])
+
+        eq_(len(result), 1)
+        eq_(result[0], "./testfiles/foo.cpp")
+
+    def test_find_possible_files_none_exist(self):
+        result = twoface.main.filter_existing_files( ["./testfiles/foo.hpp", "./testfiles/foo.c"])
+
+        eq_(len(result), 0)
+
+
 class TestOpenFile(unittest.TestCase):
     def setUp(self):
         global OPEN_FILE_CALLS
